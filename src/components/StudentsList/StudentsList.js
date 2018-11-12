@@ -1,78 +1,55 @@
 import React from 'react';
 //import ListStudent from './../repository/studentRepository'
 import StudentItem from '../StudentItem/studentItem'
-import {editStudent} from '../App/App'
+import EditStudentDetails from '../EditStudentDetails/EditStudentDetails'
 
 export default class StudentsList extends React.Component {
-
     constructor(props) {
         super(props);
         this.state = {
-            paging: {
-                currentPage: 1,
-                itemsPerPage: 10,
-
-            }
-        }
+            students: props.students,
+            editForm: null,
+            clickedIndex: null
+        };
+        this.handleClick = this.handleClick.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
     }
 
-    changePage = (e) => {
-        const pageNumber = Number(e.target.id)
-        this.setState( (state) => {
-            const paging = state.paging;
-            paging.currentPage=pageNumber;
-            return {'paging':paging};
-
+    handleClick(event) {
+        let id = event.target.getAttribute('id');
+        this.setState({
+            clickedIndex: id
+        });
+        let student = this.state.students[id];
+        this.setState({
+            editForm: <EditStudentDetails
+                onSubmit={this.handleSubmit}
+                firstName={student.firstName}
+                lastName={student.lastName}
+                index={student.index}
+                studyProgramme={student.studyProgramme}/>
         });
     }
 
-
-
+    handleSubmit(student) {
+        let newStudents = this.state.students;
+        newStudents[this.state.clickedIndex] = student;
+        this.setState({
+            students: newStudents,
+            editForm: null,
+            clickedIndex: null
+        });
+    }
 
     render() {
-        const paging = this.state.paging;
-        const indexOfLast = paging.currentPage * paging.itemsPerPage;
-        const indexOfFirst = indexOfLast - paging.itemsPerPage;
-        const items = this.props.items.slice(indexOfFirst, indexOfLast);
-        const numberOfPages = Math.ceil(this.props.items.length / paging.itemsPerPage);
-        const pageNumbers = [];
-
-        const listItems = items.map( (item, index) => {
-            return (
-                <StudentItem  editStudent={this.props.editStudent} key={index} item={item}  indeks={item.indeks} smer={item.smer}/>
-            );
+        let listItems = this.state.students.map((item, index) => {
+            return <li key={index} id={index} className="list-group-item">{item.firstName} {item.lastName}</li>
         });
-        const pages = pageNumbers.map(number=> {
-            return (
-                <li onClick={this.changePage} key={number} id={number}>
-                    {number}
-                    </li>
-            )
-        });
-
         return (
-            <div>
-            <table>
-                <thead>
-                <tr>
-                    <th>Ime</th>
-                    <th>Prezime</th>
-                    <th>Izmeni</th>
-                </tr>
-                </thead>
-                <tbody>
-                {listItems}
-                </tbody>
-                <ul className="paging">
-                    {pages}
-                </ul>
-            </table>
+            <div className="list-group">
+                <ul onClick={this.handleClick}>{listItems}</ul>
+                {this.state.editForm}
             </div>
         );
-
-
-
-
-
     }
 }

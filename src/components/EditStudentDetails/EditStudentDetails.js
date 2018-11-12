@@ -1,86 +1,36 @@
 import React from 'react'
 
-export default class EditStudentDetails extends React.Component {
+export default function EditStudentDetails(props) {
+    const handleSubmit = e => {
+        e.preventDefault();
+        props.onSubmit(state);
+    };
 
-    constructor(props){
-        super(props);
-        this.state={
-            index: props.index,
-            student: props.student
+    const state = {
+        firstName: props.firstName,
+        lastName: props.lastName,
+        index: props.index,
+        studyProgramme: props.studyProgramme
+    };
 
-        }
+    function handleChange(event) {
+        state[event.target.name] = event.target.value;
     }
 
-    handleChange = this.handleChange.bind(this);
-    handleSubmit = this.handleSubmit.bind(this);
-
-    handleChange(event){
-        const newStudent = this.state.student;
-        newStudent[event.target.name] = event.target.value;
-        this.setState({
-            student: newStudent
-        });
-    }
-    handleSubmit(event){
-        event.preventDefault();
-        this.props.handleChangedStudent(this.state);
-        this.setState({redirectTo:"/"});
-    }
-
-
-
-
-
-
-    render() {
-        if (this.state.student != null){
-        return (
-            <form onSubmit={this.handleSubmit}>
-                <table>
-                    <tbody>
-                    <tr>
-                        <td>
-                            Ime:
-                        </td>
-                        <td>
-                            <input type="text" name="firstName" value={this.state.student.firstName } onChange={this.handleChange}/>
-
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            Prezime:
-                        </td>
-                        <td>
-                            <input type="text" name="lastName" value={this.state.student.lastName } onChange={this.handleChange}/>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            Index:
-                        </td>
-                        <td>
-                            <input type="text" name="indeks" value={this.state.student.indeks }onChange={this.handleChange}/>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            Smer:
-                        </td>
-                        <td>
-                            <input type="text" name="smer" value={this.state.student.smer } onChange={this.handleChange}/>
-
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <input type="submit" value="Submit"/>
-                        </td>
-                    </tr>
-                    </tbody>
-                </table>
+    return (
+        <div>
+            <p>Edit student form</p>
+            <form onSubmit={handleSubmit}>
+                <label>First name</label>
+                <input type="text" name="firstName" defaultValue={state.firstName} onChange={handleChange}/>
+                <label>Last name</label>
+                <input type="text" name="lastName" defaultValue={state.lastName} onChange={handleChange}/>
+                <label>Index</label>
+                <input type="text" name="index" defaultValue={state.index} onChange={handleChange}/>
+                <label>Study programme</label>
+                <input type="text" name="studyProgramme" defaultValue={state.studyProgramme} onChange={handleChange}/>
+                <input type="submit" value="Submit"/>
             </form>
-        );}
-        else return null;
-    }
+        </div>
+    );
 }
