@@ -11,12 +11,18 @@ class App extends React.Component {
         this.state = {
             students: listStudents()
         };
+
+        this.handleClick = this.handleClick.bind(this);
+    }
+
+    handleClick(){
+
     }
 
     render() {
         return (
             <div className="App">
-                <StudentsList students={this.state.students}/>
+                <StudentsList students={this.state.students} handleClick={this.handleClick}/>
             </div>
         );
     }
