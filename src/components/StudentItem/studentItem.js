@@ -2,7 +2,7 @@ import React from 'react'
 import {Link} from 'react-router-dom'
 
 class StudentItem extends React.Component {
-    constructor (props) {
+    constructor(props) {
         super(props);
         this.state = {
             firstName: props.firstName,
@@ -25,6 +25,8 @@ class StudentItem extends React.Component {
             firstName: firstName
         });
     }
+
 }
+
 
 export default StudentItem;
